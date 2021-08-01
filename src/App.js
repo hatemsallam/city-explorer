@@ -19,7 +19,7 @@ constructor(props){
     event.preventDefault();
     let cityName = event.target.city.value;
     console.log(cityName);
-    let Url = `https://eu1.locationiq.com/v1/search.php?key=pk.5fb79615c462bb7a6bbd8e4280a79d7a&q=${cityName}&format=json`;
+    let Url = `https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_KEY}&q=${cityName}&format=json`;
 
     // try {
     let locResult = await axios.get(Url)
