@@ -4,6 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Map from './components/Map';
 import Weather from './components/Weather';
+import Movies from './components/Movies';
 
 
 
@@ -19,7 +20,8 @@ class App extends React.Component {
       errorMsg: 'bad response',
       displayErr: false,
       showCard: false,
-      weather : ''
+      weather: [],
+      movies: []
     }
   }
   getLocationandWeatherData = async (event) => {
@@ -27,34 +29,14 @@ class App extends React.Component {
     let cityName = event.target.city.value;
     console.log(cityName);
     let Url = `https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_KEY}&q=${cityName}&format=json`;
-    let URL = '';
-
-
-
-    if(cityName === 'amman' || cityName === 'AMMAN')
-    {
-      URL = `${process.env.REACT_APP_SERVER_URL}/weather?lat=31.95&lon=35.91&searchQuery=Amman`;
-    }
-    else if(cityName === 'paris' || cityName === 'PARIS')
-    {
-      URL = `${process.env.REACT_APP_SERVER_URL}/weather?lat=48.86&lon=2.35&searchQuery=Paris`;
-    }
-    else if(cityName === 'seattle' || cityName === 'SEATTLE')
-    {
-      URL = `${process.env.REACT_APP_SERVER_URL}/weather?lat=47.60621&lon=-122.33207&searchQuery=Seattle`;
-    }
-
-
+    let URLlocalHost = `http://localhost:3003/getWeather?lat=${this.state.lat}&lon=${this.state.lon}&cityname=${cityName}`
+    let URLmovies = `http://localhost:3003/movies?cityname=${cityName}`
 
 
 
     try {
       let locResult = await axios.get(Url)
 
-
-      
-
-      let weatherData =  axios.get(URL);
 
       this.setState(
         {
@@ -63,12 +45,40 @@ class App extends React.Component {
           lat: locResult.data[0].lat,
           showMap: true,
           showCard: true,
-          weather : weatherData.data
 
         }
       )
 
+
+      let weatherResult = await axios.get(URLlocalHost)
+
+
+      this.setState(
+        {
+          weather: weatherResult.data
+
+        }
+      )
+      let moviesResult = await axios.get(URLmovies)
+
+
+      this.setState(
+        {
+          movies: moviesResult.data
+
+        }
+      )
+
+
+
+
+
+
     }
+
+
+
+
 
 
     catch {
@@ -79,9 +89,9 @@ class App extends React.Component {
       })
     }
 
-  
 
-   
+
+
 
 
 
@@ -101,7 +111,9 @@ class App extends React.Component {
 
         <Map displayName={this.state.displayName} showMap={this.state.showMap} lat={this.state.lat} lon={this.state.lon} displayErr={this.state.displayErr} errorMsg={this.state.errorMsg} showCard={this.state.showCard} ></Map>
 
-         <Weather weather={this.state.weather}  ></Weather>
+        <Weather showCard= {this.state.showCard} weather={this.state.weather}  ></Weather>
+
+        <Movies showCard= {this.state.showCard} movies={this.state.movies}  ></Movies>
 
 
 
