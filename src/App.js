@@ -29,8 +29,8 @@ class App extends React.Component {
     let cityName = event.target.city.value;
     console.log(cityName);
     let Url = `https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_KEY}&q=${cityName}&format=json`;
-    let URLlocalHost = `http://localhost:3003/getWeather?lat=${this.state.lat}&lon=${this.state.lon}&cityname=${cityName}`
-    let URLmovies = `http://localhost:3003/movies?cityname=${cityName}`
+    let URLlocalHost = `${process.env.REACT_APP_SERVER}/getWeather?lat=${this.state.lat}&lon=${this.state.lon}&cityname=${cityName}`
+    let URLmovies = `${process.env.REACT_APP_SERVER}/movies?cityname=${cityName}`
 
 
 
